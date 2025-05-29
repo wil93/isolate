@@ -1,0 +1,26 @@
+# syntax=docker/dockerfile:1
+FROM jrei/systemd-ubuntu:20.04
+# FROM ubuntu:20.04
+
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    asciidoc \
+    build-essential \
+    docbook-xml \
+    docbook-xsl \
+    libcap-dev \
+    libsystemd-dev \
+    libxml2-utils \
+    pkg-config \
+    xsltproc
+
+COPY systemd/isolate.* /etc/systemd/system/
+RUN systemctl enable isolate
+
+COPY . /root
+WORKDIR /root
+
+RUN make
+RUN make install
+
+CMD [ "/sbin/init" ]

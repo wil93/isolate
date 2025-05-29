@@ -1,0 +1,6 @@
+services:
+  test_isolate:
+    build: .
+    command: ./test.sh
+    privileged: true
+    cgroup: host

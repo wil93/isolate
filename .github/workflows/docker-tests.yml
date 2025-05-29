@@ -1,0 +1,26 @@
+name: ci
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Check available cgroups
+        run: |
+          mount | grep cgroup
+
+      - name: Build docker image
+        run: |
+          docker compose build test_isolate
+
+      - name: Run tests
+        run: |
+          docker compose run test_isolate

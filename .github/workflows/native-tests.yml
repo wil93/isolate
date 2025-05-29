@@ -1,0 +1,26 @@
+name: ci
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Check available cgroups
+        run: |
+          mount | grep cgroup
+
+      - name: Install isolate
+        run: |
+          sudo apt-get install -y asciidoc build-essential docbook-xml docbook-xsl libcap-dev libsystemd-dev libxml2-utils pkg-config xsltproc && make && sudo make install
+
+      - name: Run tests
+        run: |
+          ./test.sh
